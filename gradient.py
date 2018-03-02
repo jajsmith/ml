@@ -1,8 +1,6 @@
 # gradient.py
 # Functions related to getting gradients
 
-from functools import reduce
-
 def squared_error(a, b):
   return (b - a)*(b - a)
 
@@ -23,11 +21,10 @@ def mse_cost_2d(theta, training_set):
   
   m = len(training_set)
 
-  errors = map(
-    (lambda point: hypothesis_2d(theta[0], theta[1], point[0]) - point[1]),
+  squared_errors = map(
+    lambda point: squared_error( hypothesis_2d(theta[0], theta[1], point[0]), point[1] ),
     training_set
   )
-  squared_errors = map( lambda x: x*x, errors )
 
   sum_squared_errors = 0
   for se in squared_errors:
