@@ -78,7 +78,7 @@ def gradient_descent_mse_2d(training_set, learning_rate=0.05, convergence_diff=[
   while not array_all_lt( array_abs_diff(hypothesis_theta, last_theta), convergence_diff ):
     if (plotting):
       # plot the line created by theta features
-      
+      # Don't actually show plot here, we'll show it at the end
       x = np.linspace(-15, 15, 100)
       y = hypothesis_theta[0] + hypothesis_theta[1]*x
       plt.plot(x, y)
@@ -92,22 +92,22 @@ def gradient_descent_mse_2d(training_set, learning_rate=0.05, convergence_diff=[
     last_theta = hypothesis_theta
 
     # this is hard-coded for now based on using the mse_cost_2d function
-    # partial deriv of mse_cost_2d w.r.t feature 0
-    #  (t + t2*x - y)*(t + t2*x - y) = t^2 + t*t2*x - t*y + t*t2*x -t*y ... partial deriv:
-    #  ( sum(2*t + 2*t_2*x - 2*y) ) / 2*m
-    # partial deriv of mse_cost_2d w.r.t feature 1
-    # ... = t*t_2*x + (t_2*t*x + (t_2*x)^2 - t_2*x*y) - t_2*x*y
-    # = 2*t*x + 2*t_2*x^2 + 2*x*y / 2*m
-    partial_deriv = [
-      (hypothesis_theta[0]*m +
-        hypothesis_theta[0]*hypothesis_theta[1]*sum(training_xs) +
-        sum(training_ys)) / m,
-      (hypothesis_theta[0]*sum(training_xs) +
-        hypothesis_theta[0]*sum(map(lambda x: x*x, training_xs)) +
-        sum(map(lambda x,y: x*y, training_xs, training_ys))) / m,
-    ]
     ht = hypothesis_theta
 
+    # Partial Derivative of mse_cost_2d function
+    theta0_pd = 0
+    for i in range(0, m):
+      theta0_pd += hypothesis_2d(ht[0], ht[1], training_xs[i]) - training_ys[i]
+    theta0_pd = theta0_pd / m
+    
+    theta1_pd = 0
+    for i in range(0, m):
+      theta1_pd += training_xs[i] * (hypothesis_2d(ht[0], ht[1], training_xs[i]) - training_ys[i]) 
+    theta1_pd = theta1_pd / m
+
+    partial_deriv = [theta0_pd, theta1_pd]
+
+    # Generate new hypothesis
     new_hypothesis = [
       hypothesis_theta[0] - learning_rate * partial_deriv[0],
       hypothesis_theta[1] - learning_rate * partial_deriv[1],
