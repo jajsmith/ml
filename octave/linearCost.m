@@ -1,4 +1,4 @@
-function J = costJ(X, y, theta)
+function J = linearCost(X, y, theta)
 
 % Requires
 % X - training examples matrix

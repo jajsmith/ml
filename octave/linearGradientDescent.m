@@ -1,4 +1,4 @@
-function theta = gradientDescentUpdate(X, Y, theta, learningRate, numIterations)
+function theta = linearGradientDescent(X, Y, theta, learningRate, numIterations)
 
 % NOTE: Uses vectorization optimizations in octave rather than the iterative
 % approach we're using in python right now
